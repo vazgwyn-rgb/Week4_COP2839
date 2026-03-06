@@ -41,16 +41,12 @@ namespace GuitarShop.Areas.Admin.Controllers
                     .OrderBy(p => p.ProductID).ToList();
             }
 
-           
-            var model = new ProductListViewModel
-            { 
-            Categories = categories,
-            Products = products,
-            SelectedCategory = id
-            };
+            // use ViewBag to pass category data to view
+            ViewBag.Categories = categories;
+            ViewBag.SelectedCategoryName = id;
 
             // bind products to view
-            return View(model);
+            return View(products);
         }
 
         [HttpGet]
@@ -91,12 +87,10 @@ namespace GuitarShop.Areas.Admin.Controllers
                 if (product.ProductID == 0)           // new product
                 {
                     context.Products.Add(product);
-                    TempData["UserMessage"] = $"You just added the product {product.Name}.";
                 }
                 else                                  // existing product
                 {
                     context.Products.Update(product);
-                    TempData["UserMessage"] = $"You just updated the product {product.Name}.";
                 }
                 context.SaveChanges();
                 return RedirectToAction("List");
